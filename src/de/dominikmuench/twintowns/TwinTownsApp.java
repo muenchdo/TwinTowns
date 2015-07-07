@@ -39,18 +39,28 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.setTweening(true);
 		map.zoomAndPanTo(6, new Location(51.164181f, 10.454150f));
 		map.setZoomRange(3, 9);
-		MapUtils.createDefaultEventDispatcher(this, map);
-		mouseEventDispatcher = MapUtils.createMouseEventDispatcher(this, map);
-		
-		mouseEventDispatcher.register(this, "click");
-		
+		//		MapUtils.createDefaultEventDispatcher(this, map);
+		//		mouseEventDispatcher = MapUtils.createMouseEventDispatcher(this, map);
+
+		//		mouseEventDispatcher.register(this, "click");
+
+
 		// UI
 		cp5 = new ControlP5(this);
-		cp5.addButton("colorA")
-	     .setValue(0)
-	     .setPosition(100,100)
-	     .setSize(200,19);
-		
+		MapState.getInstance().setCp5(cp5);
+		cp5.addTextfield("municipalityFilter")
+		.setPosition(10, 10)
+		.setSize(200, 20)
+		.setCaptionLabel("City")
+		.setColorCaptionLabel(0);
+		cp5.addTextfield("stateFilter")
+		.setPosition(10, 60)
+		.setSize(200, 20)
+		.setCaptionLabel("State")
+		.setColorCaptionLabel(0);;
+
+		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 80));
+
 		// Data & Markers
 		table = new TwinTownTable(this);
 
