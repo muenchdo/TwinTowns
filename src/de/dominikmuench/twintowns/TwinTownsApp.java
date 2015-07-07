@@ -6,8 +6,9 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.data.TableRow;
 import controlP5.ControlP5;
-import de.dominikmuench.twintowns.markers.MunicipalityMarker;
 import de.dominikmuench.twintowns.markers.PartnershipMarker;
+import de.dominikmuench.twintowns.model.GermanMunicipality;
+import de.dominikmuench.twintowns.model.Municipality;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.events.EventDispatcher;
 import de.fhpotsdam.unfolding.events.MapEvent;
@@ -15,7 +16,6 @@ import de.fhpotsdam.unfolding.events.MapEventListener;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.providers.EsriProvider;
-import de.fhpotsdam.unfolding.utils.MapUtils;
 
 @SuppressWarnings("serial")
 public class TwinTownsApp extends PApplet implements MapEventListener {
@@ -31,7 +31,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	@Override
 	public void setup() {
 		// General
-		size(displayWidth, displayHeight);
+		size(1280, 800, P2D);
+//		size(displayWidth, displayHeight, P2D);
 		smooth();
 		
 		// Map
@@ -64,31 +65,35 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		// Data & Markers
 		table = new TwinTownTable(this);
 
-		List<PartnershipMarker> markers = new ArrayList<PartnershipMarker>();
+		List<PartnershipMarker> markers = new ArrayList<>();
 		PartnershipMarker lastMarker = null;
 		for (TableRow row : table.rows()) {	
 			////////// My MacBook is too slow!
-//			if (!(table.getPartnerContinent(row).contains("Europe") && table.getState(row).contains("Bayern"))) {
-//				continue;
-//			}
+			//			if (!(table.getPartnerContinent(row).contains("Europe") && table.getState(row).contains("Bayern"))) {
+			//				continue;
+			//			}
 			if (table.getMunicipality(row).contains("Kreis")) {
 				continue;
 			}
 			//////////
 
-			Location fromLocation = new Location(table.getLatitude(row), table.getLongitude(row));
-			MunicipalityMarker fromMarker = new MunicipalityMarker(fromLocation);
-			
-			Location toLocation = new Location(table.getPartnerLatitude(row), table.getPartnerLongitude(row));
-			MunicipalityMarker toMarker = new MunicipalityMarker(toLocation);
-			
-			String municipality = table.getMunicipality(row);
-			if (lastMarker == null || !lastMarker.getMunicipality().equals(municipality)) {
-				PartnershipMarker connMarker = new PartnershipMarker(table.getMunicipality(row), fromMarker, toMarker);
+			GermanMunicipality germanMunicipality = new GermanMunicipality(
+					table.getMunicipality(row), 
+					new Location(table.getLatitude(row), table.getLongitude(row)),
+					table.getState(row));
+
+			Municipality partnerMunicipality = new Municipality(
+					table.getPartnerMunicipality(row),
+					new Location(table.getPartnerLatitude(row), table.getPartnerLongitude(row)),
+					table.getPartnerCountry(row),
+					table.getPartnerContinent(row));
+
+			if (lastMarker == null || !lastMarker.getGermanMunicipality().getName().equals(table.getMunicipality(row))) {
+				PartnershipMarker connMarker = new PartnershipMarker(germanMunicipality, partnerMunicipality);
 				markers.add(connMarker);
 				lastMarker = connMarker;
 			} else {
-				lastMarker.addToMarker(toMarker);
+				lastMarker.addPartnerMunicipality(partnerMunicipality);
 			}
 		}
 		for (PartnershipMarker marker : markers) {
@@ -104,10 +109,10 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.draw();
 	}
 
-	@Override
-	public boolean sketchFullScreen() {
-		return true;
-	}
+//	@Override
+//	public boolean sketchFullScreen() {
+//		return true;
+//	}
 
 	@Override
 	public void mouseMoved() {
@@ -117,9 +122,9 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		List<Marker> markers = map.getHitMarkers(mouseX, mouseY);
 		String firstMunicipality;
 		if (!markers.isEmpty()) {
-			firstMunicipality = ((PartnershipMarker) markers.get(0)).getMunicipality();  
+			firstMunicipality = ((PartnershipMarker) markers.get(0)).getGermanMunicipality().getName();  
 			for (Marker marker : markers) {
-				String municipality = ((PartnershipMarker) marker).getMunicipality();
+				String municipality = ((PartnershipMarker) marker).getGermanMunicipality().getName();
 				if (municipality.equals(firstMunicipality)) {
 					marker.setSelected(true);
 				}

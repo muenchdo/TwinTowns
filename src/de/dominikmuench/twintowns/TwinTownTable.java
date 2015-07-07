@@ -12,6 +12,7 @@ public class TwinTownTable extends Table{
 	private final static String COL_LNG = "longitude";
 	private final static String COL_STATE = "bundesland";
 	private final static String COL_PARTNER_MUNICIPALITY = "partnergemeinde";
+	private final static String COL_PARTNER_COUNTRY = "country";
 	private final static String COL_PARTNER_CONTINENT = "continent";
 	private final static String COL_PARTNER_LAT = "partner_latitude";
 	private final static String COL_PARTNER_LNG = "partner_longitude";
@@ -96,6 +97,16 @@ public class TwinTownTable extends Table{
 	 */
 	public float getPartnerLongitude(TableRow row) {
 		return row.getFloat(COL_PARTNER_LNG);
+	}
+	
+	/**
+	 * Gets the country of the partner municipality for a given row.
+	 * 
+	 * @param row
+	 * @return
+	 */
+	public String getPartnerCountry(TableRow row) {
+		return row.getString(COL_PARTNER_COUNTRY);
 	}
 	
 	/**
