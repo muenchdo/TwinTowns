@@ -14,6 +14,7 @@ import de.fhpotsdam.unfolding.events.MapEvent;
 import de.fhpotsdam.unfolding.events.MapEventListener;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
+import de.fhpotsdam.unfolding.marker.MarkerManager;
 import de.fhpotsdam.unfolding.providers.EsriProvider;
 
 @SuppressWarnings("serial")
@@ -21,6 +22,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 	private TwinTownTable table;
 	private UnfoldingMap map;
+	private MarkerManager<Marker> markerManager;
 	private ControlP5 cp5; 
 
 	/* (non-Javadoc)
@@ -29,7 +31,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	@Override
 	public void setup() {
 		// General
-		size(1280, 800, P2D);
+		size(800, 600, P2D);
 //		size(displayWidth, displayHeight, P2D);
 		smooth();
 		
@@ -39,24 +41,25 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.setTweening(true);
 		map.zoomAndPanTo(6, new Location(51.164181f, 10.454150f));
 		map.setZoomRange(3, 9);
-
-
+		this.markerManager = map.getDefaultMarkerManager();
+		
 		// UI
 		cp5 = new ControlP5(this);
 		MapState.getInstance().setCp5(cp5);
 		cp5.addTextfield("municipalityFilter")
+//		.setText("Berlin")
 		.setPosition(10, 10)
 		.setSize(200, 20)
 		.setCaptionLabel("City")
 		.setColorCaptionLabel(0);
 		cp5.addTextfield("stateFilter")
-		.setPosition(10, 60)
+		.setText("Bavaria")
+		.setPosition(10, 55)
 		.setSize(200, 20)
 		.setCaptionLabel("State")
-		.setColorCaptionLabel(0)
-		.setText("Bavaria");
+		.setColorCaptionLabel(0);
 
-		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 80));
+		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 75));
 
 		// Data & Markers
 		table = new TwinTownTable(this);
