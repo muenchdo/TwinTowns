@@ -2,6 +2,7 @@ package de.dominikmuench.twintowns.markers;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import processing.core.PFont;
@@ -12,6 +13,7 @@ import controlP5.Textfield;
 import de.dominikmuench.twintowns.MapState;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
 import de.dominikmuench.twintowns.model.Municipality;
+import de.dominikmuench.twintowns.utility.Utilities;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.utils.MapPosition;
@@ -23,7 +25,8 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	private List<Municipality> partnerMunicipalities;
 
 	private int radius;
-	
+	private int highlightColorTransparent;
+
 	public PartnershipMarker(GermanMunicipality germanMunicipality, Municipality partnerMunicipality) {
 		this(germanMunicipality, new Municipality[]{partnerMunicipality});
 	}
@@ -31,15 +34,16 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	public PartnershipMarker(GermanMunicipality germanMunicipality, Municipality[] partnerMunicipalities) {
 		this.germanMunicipality = germanMunicipality;
 		this.partnerMunicipalities = new ArrayList<Municipality>();
-		
+
 		addLocations(germanMunicipality.getLocation());
 		for (Municipality partnerMunicipality : partnerMunicipalities) {
 			addLocations(partnerMunicipality.getLocation());
 			this.partnerMunicipalities.add(partnerMunicipality);
 		}
-		
+
 		this.color = new Color(200, 200, 0, 100).getRGB();
-		this.highlightColor = new Color(0, 200, 200, 100).getRGB();
+		this.highlightColor = new Color(0, 200, 200, 255).getRGB();
+		this.highlightColorTransparent = new Color(0, 200, 200, 100).getRGB();
 		this.radius = 5;
 	}
 
@@ -60,53 +64,58 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	}
 
 	@Override
-	public void draw(PGraphics pg, List<MapPosition> mapPositions) {
-		MapPosition from = mapPositions.get(0);
-		List<MapPosition> toPositions = new ArrayList<>(mapPositions);
-		if (!toPositions.isEmpty()) {
-			toPositions.remove(0);
-		}
+	protected void draw(PGraphics pg, List<MapPosition> mapPositions,
+			HashMap<String, Object> properties, UnfoldingMap map) {
 
-		// municipality
+		// German municipality
+		ScreenPosition municipalityScreenPos = map.getScreenPosition(germanMunicipality.getLocation());
 		if (fulfillsFilter()) {
 			pg.pushStyle();
-			pg.strokeWeight(strokeWeight);
 			pg.noStroke();
 			if (isSelected()) {
 				pg.fill(highlightColor);
 				pg.textSize(12);
 				pg.textAlign(PFont.CENTER, PFont.BOTTOM);
-				pg.text(germanMunicipality.getName(), from.x, from.y);
+				pg.text(germanMunicipality.getName(), municipalityScreenPos.x, municipalityScreenPos.y);
 			} else {
 				pg.fill(color);
 			}
-			pg.ellipse((int) from.x, (int) from.y, radius, radius); // TODO use radius in km and convert to px
+			pg.ellipse(municipalityScreenPos.x, municipalityScreenPos.y, radius, radius);
 			pg.popStyle();
 
+			// Partner municipalities
+			for (Municipality partnerMunicipality : partnerMunicipalities) {
+				ScreenPosition partnerScreenPos = map.getScreenPosition(partnerMunicipality.getLocation());
 
-			for (MapPosition toPosition : toPositions) {
-				// connection
+				// Connection
 				if (isSelected()) {
 					pg.pushStyle();
 					pg.strokeWeight(2);
-					pg.stroke(0, 200, 200, 100);
-					pg.line(from.x, from.y, toPosition.x, toPosition.y);
+					pg.stroke(highlightColorTransparent);
+					pg.line(municipalityScreenPos.x, municipalityScreenPos.y, partnerScreenPos.x, partnerScreenPos.y);
 					pg.popStyle();
 				}
 
-				// partner municipality
+				// Partner municipality
 				pg.pushStyle();
 				pg.strokeWeight(strokeWeight);
 				pg.noStroke();
 				if (isSelected()) {
 					pg.fill(highlightColor);
-				} else {
-					pg.fill(color, 0);
+					pg.ellipse(partnerScreenPos.x, partnerScreenPos.y, radius, radius);
+					PVector intersection = Utilities.findMapEdgeIntersection(municipalityScreenPos, partnerScreenPos);
+					pg.textAlign(PFont.CENTER, PFont.TOP);
+					pg.text(partnerMunicipality.getName(), intersection.x, intersection.y);
 				}
-				pg.ellipse(toPosition.x, toPosition.y, radius, radius); // TODO use radius in km and convert to px
 				pg.popStyle();
 			}
 		}
+	}
+
+	@Override
+	public void draw(PGraphics pg, List<MapPosition> mapPositions) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override

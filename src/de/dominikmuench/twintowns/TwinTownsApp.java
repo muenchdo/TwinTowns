@@ -35,6 +35,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		
 		// Map
 		map = new UnfoldingMap(this, new EsriProvider.WorldGrayCanvas());
+		MapState.getInstance().setMap(map);
 		map.setTweening(true);
 		map.zoomAndPanTo(6, new Location(51.164181f, 10.454150f));
 		map.setZoomRange(3, 9);
@@ -62,15 +63,10 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 		List<PartnershipMarker> markers = new ArrayList<>();
 		PartnershipMarker lastMarker = null;
-		for (TableRow row : table.rows()) {	
-			////////// My MacBook is too slow!
-			//			if (!(table.getPartnerContinent(row).contains("Europe") && table.getState(row).contains("Bayern"))) {
-			//				continue;
-			//			}
+		for (TableRow row : table.rows()) {
 			if (table.getMunicipality(row).contains("Kreis")) {
 				continue;
 			}
-			//////////
 
 			GermanMunicipality germanMunicipality = new GermanMunicipality(
 					table.getMunicipality(row), 
@@ -121,6 +117,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 			for (Marker marker : markers) {
 				String municipality = ((PartnershipMarker) marker).getGermanMunicipality().getName();
 				if (municipality.equals(firstMunicipality)) {
+					map.getMarkers().remove(marker);
+					map.getMarkers().add(marker);
 					marker.setSelected(true);
 				}
 			}
