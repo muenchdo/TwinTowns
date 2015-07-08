@@ -10,7 +10,6 @@ import de.dominikmuench.twintowns.markers.PartnershipMarker;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
 import de.dominikmuench.twintowns.model.Municipality;
 import de.fhpotsdam.unfolding.UnfoldingMap;
-import de.fhpotsdam.unfolding.events.EventDispatcher;
 import de.fhpotsdam.unfolding.events.MapEvent;
 import de.fhpotsdam.unfolding.events.MapEventListener;
 import de.fhpotsdam.unfolding.geo.Location;
@@ -22,7 +21,6 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 	private TwinTownTable table;
 	private UnfoldingMap map;
-	private EventDispatcher mouseEventDispatcher;
 	private ControlP5 cp5; 
 
 	/* (non-Javadoc)
@@ -40,10 +38,6 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.setTweening(true);
 		map.zoomAndPanTo(6, new Location(51.164181f, 10.454150f));
 		map.setZoomRange(3, 9);
-		//		MapUtils.createDefaultEventDispatcher(this, map);
-		//		mouseEventDispatcher = MapUtils.createMouseEventDispatcher(this, map);
-
-		//		mouseEventDispatcher.register(this, "click");
 
 
 		// UI
@@ -58,7 +52,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		.setPosition(10, 60)
 		.setSize(200, 20)
 		.setCaptionLabel("State")
-		.setColorCaptionLabel(0);;
+		.setColorCaptionLabel(0)
+		.setText("Bavaria");
 
 		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 80));
 

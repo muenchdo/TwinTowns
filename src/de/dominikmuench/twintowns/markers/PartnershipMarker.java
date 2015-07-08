@@ -7,6 +7,7 @@ import java.util.List;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
+import controlP5.ControlP5;
 import controlP5.Textfield;
 import de.dominikmuench.twintowns.MapState;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
@@ -50,6 +51,13 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		addLocations(partnerMunicipality.getLocation());
 		this.partnerMunicipalities.add(partnerMunicipality);
 	}
+	
+	public boolean fulfillsFilter() {
+		ControlP5 cp5 = MapState.getInstance().getCp5();
+		boolean filteredByMunicipality = germanMunicipality.getName().contains(cp5.get(Textfield.class, "municipalityFilter").getText());
+		boolean filteredByState = germanMunicipality.getState().contains(cp5.get(Textfield.class, "stateFilter").getText());
+		return filteredByMunicipality && filteredByState;
+	}
 
 	@Override
 	public void draw(PGraphics pg, List<MapPosition> mapPositions) {
@@ -60,7 +68,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		}
 
 		// municipality
-		if (germanMunicipality.getName().contains(MapState.getInstance().getCp5().get(Textfield.class, "municipalityFilter").getText())) {
+		if (fulfillsFilter()) {
 			pg.pushStyle();
 			pg.strokeWeight(strokeWeight);
 			pg.noStroke();

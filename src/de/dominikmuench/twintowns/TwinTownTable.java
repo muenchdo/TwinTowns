@@ -10,7 +10,7 @@ public class TwinTownTable extends Table{
 	private final static String COL_MUNICIPALITY = "municipality";
 	private final static String COL_LAT = "latitude";
 	private final static String COL_LNG = "longitude";
-	private final static String COL_STATE = "bundesland";
+	private final static String COL_STATE = "state";
 	private final static String COL_PARTNER_MUNICIPALITY = "partnergemeinde";
 	private final static String COL_PARTNER_COUNTRY = "country";
 	private final static String COL_PARTNER_CONTINENT = "continent";

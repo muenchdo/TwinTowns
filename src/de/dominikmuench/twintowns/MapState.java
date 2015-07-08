@@ -8,8 +8,6 @@ public class MapState {
 
 	private ControlP5 cp5;
 
-	private String municipalityFilter;
-
 	private MapState() {
 	}
 
@@ -26,13 +24,5 @@ public class MapState {
 
 	public void setCp5(ControlP5 cp5) {
 		this.cp5 = cp5;
-	}
-
-	public String getMunicipalityFilter() {
-		return municipalityFilter;
-	}
-
-	public void setMunicipalityFilter(String municipalityFilter) {
-		this.municipalityFilter = municipalityFilter;
 	}
 }
