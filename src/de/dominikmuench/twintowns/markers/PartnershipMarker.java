@@ -28,6 +28,10 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	private int radius;
 	private int highlightColorTransparent;
 	private static final int textSpacing = 5;
+	private static final String rightArrow = "→";
+	private static final String leftArrow = "←";
+	private static final String upArrow = "↑";
+	private static final String downArrow = "↓";
 
 	public PartnershipMarker(GermanMunicipality germanMunicipality, Municipality partnerMunicipality) {
 		this(germanMunicipality, new Municipality[]{partnerMunicipality});
@@ -108,28 +112,44 @@ public class PartnershipMarker extends AbstractShapeMarker {
 					Map<String, Object> intersectionInfo = Utilities.findMapEdgeIntersection(municipalityScreenPos, partnerScreenPos);
 					PVector intersection = (PVector) intersectionInfo.get(Utilities.KEY_INTERSECTION);
 					String edge = (String) intersectionInfo.get(Utilities.KEY_EDGE);
+					String arrowedName = partnerMunicipality.getName();
 					switch (edge) {
 					case Utilities.TOP_EDGE:
 						pg.textAlign(PFont.CENTER, PFont.TOP);
+						arrowedName = upArrow + " " + arrowedName;
 						intersection.y += textSpacing;
 						break;
 					case Utilities.RIGHT_EDGE:
 						pg.textAlign(PFont.RIGHT, PFont.CENTER);
+						arrowedName = arrowedName + " " + rightArrow;
 						intersection.x -= textSpacing;
 						break;
 					case Utilities.BOTTOM_EDGE:
 						pg.textAlign(PFont.CENTER, PFont.BOTTOM);
+						arrowedName = downArrow + " " + arrowedName;
 						intersection.y -= textSpacing;
 						break;
 					case Utilities.LEFT_EDGE:
 						pg.textAlign(PFont.LEFT, PFont.CENTER);
+						arrowedName = leftArrow + " " + arrowedName;
 						intersection.x += textSpacing;
 						break;
+					case Utilities.NO_EDGE:
+						double angle = Utilities.getAngle(PVector.sub(
+								new PVector(municipalityScreenPos.x, municipalityScreenPos.y),
+								new PVector(partnerScreenPos.x, partnerScreenPos.y)));
+						if (angle > 0 && angle <= 180) {
+							pg.textAlign(PFont.CENTER, PFont.BOTTOM);
+							intersection.y -= textSpacing;
+						} else {
+							pg.textAlign(PFont.CENTER, PFont.TOP);
+							intersection.y += textSpacing;
+						}
+						break;
 					default:
-						pg.textAlign(PFont.CENTER, PFont.CENTER);
 						break;
 					}
-					pg.text(partnerMunicipality.getName(), intersection.x, intersection.y);
+					pg.text(arrowedName, intersection.x, intersection.y);
 				}
 				pg.popStyle();
 			}

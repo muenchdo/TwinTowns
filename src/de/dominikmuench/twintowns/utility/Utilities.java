@@ -61,6 +61,7 @@ public class Utilities {
 					break;
 				case 3:
 					intersectionEdge = LEFT_EDGE;
+					break;
 				default:
 					intersectionEdge = NO_EDGE;
 					break;
@@ -112,5 +113,8 @@ public class Utilities {
 
 		return intersection;
 	}
-
+	
+	public static double getAngle(PVector v) {
+		return Math.toDegrees(Math.atan2(v.y, v.x));
+	}
 }
