@@ -1,6 +1,7 @@
 package de.dominikmuench.twintowns;
 
 import controlP5.ControlP5;
+import de.dominikmuench.twintowns.markers.PartnershipMarker;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 
 public class MapState {
@@ -10,6 +11,8 @@ public class MapState {
 	private ControlP5 cp5;
 	
 	private UnfoldingMap map;
+	
+	private PartnershipMarker selectedMarker;
 
 	private MapState() {
 	}
@@ -35,5 +38,13 @@ public class MapState {
 
 	public void setMap(UnfoldingMap map) {
 		this.map = map;
+	}
+	
+	public PartnershipMarker getSelectedMarker() {
+		return selectedMarker;
+	}
+	
+	public void setSelectedMarker(PartnershipMarker selectedMarker) {
+		this.selectedMarker = selectedMarker;
 	}
 }
