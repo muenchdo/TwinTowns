@@ -14,6 +14,7 @@ import controlP5.Textfield;
 import de.dominikmuench.twintowns.MapState;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
 import de.dominikmuench.twintowns.model.Municipality;
+import de.dominikmuench.twintowns.utility.Style;
 import de.dominikmuench.twintowns.utility.Utilities;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
@@ -50,7 +51,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		this.color = new Color(200, 200, 0, 100).getRGB();
 		this.highlightColor = new Color(0, 200, 200, 255).getRGB();
 		this.highlightColorTransparent = new Color(0, 200, 200, 100).getRGB();
-		this.radius = 5;
+		this.radius = Style.MARKER_SIZE;
 	}
 
 	public GermanMunicipality getGermanMunicipality() {
@@ -61,7 +62,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		addLocations(partnerMunicipality.getLocation());
 		this.partnerMunicipalities.add(partnerMunicipality);
 	}
-	
+
 	public boolean fulfillsFilter() {
 		ControlP5 cp5 = MapState.getInstance().getCp5();
 		boolean filteredByMunicipality = germanMunicipality.getName().contains(cp5.get(Textfield.class, "municipalityFilter").getText());
@@ -72,13 +73,15 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	@Override
 	protected void draw(PGraphics pg, List<MapPosition> mapPositions,
 			HashMap<String, Object> properties, UnfoldingMap map) {
-		
-		if (MapState.getInstance().getSelectedMarker() != null && MapState.getInstance().getSelectedMarker().equals(this)) {
+
+		boolean isClicked = MapState.getInstance().getSelectedMarker() != null && MapState.getInstance().getSelectedMarker().equals(this);
+
+		if (isClicked) {
 			this.highlightColor = new Color(0, 200, 200, 255).getRGB();
 			this.highlightColorTransparent = new Color(0, 200, 200, 100).getRGB();
 		} else {
-			this.highlightColor = new Color(100, 100, 100, 255).getRGB();
-			this.highlightColorTransparent = new Color(100, 100, 100, 100).getRGB();
+			this.highlightColor = new Color(127, 127, 127, 255).getRGB();
+			this.highlightColorTransparent = new Color(127, 127, 127, 100).getRGB();
 		}
 
 		// German municipality
@@ -159,6 +162,18 @@ public class PartnershipMarker extends AbstractShapeMarker {
 					}
 					pg.text(arrowedName, intersection.x, intersection.y);
 				}
+				pg.popStyle();
+			}
+
+			// Draw info
+			if (isClicked) {
+				pg.pushStyle();
+				pg.fill(this.highlightColor);
+				pg.textAlign(PFont.RIGHT, PFont.TOP);
+				pg.text(germanMunicipality.getName() + ", " + germanMunicipality.getState(), map.getWidth() - textSpacing, textSpacing);
+				int numOfPartners = partnerMunicipalities.size();
+				String partnerText = numOfPartners == 1 ? numOfPartners + " partner municipality" : numOfPartners + " partner municipalities";
+				pg.text(partnerText, map.getWidth() - textSpacing, textSpacing * 2 + 15);
 				pg.popStyle();
 			}
 		}
