@@ -72,6 +72,14 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	@Override
 	protected void draw(PGraphics pg, List<MapPosition> mapPositions,
 			HashMap<String, Object> properties, UnfoldingMap map) {
+		
+		if (MapState.getInstance().getSelectedMarker() != null && MapState.getInstance().getSelectedMarker().equals(this)) {
+			this.highlightColor = new Color(0, 200, 200, 255).getRGB();
+			this.highlightColorTransparent = new Color(0, 200, 200, 100).getRGB();
+		} else {
+			this.highlightColor = new Color(100, 100, 100, 255).getRGB();
+			this.highlightColorTransparent = new Color(100, 100, 100, 100).getRGB();
+		}
 
 		// German municipality
 		ScreenPosition municipalityScreenPos = map.getScreenPosition(germanMunicipality.getLocation());
