@@ -14,7 +14,6 @@ import de.fhpotsdam.unfolding.events.MapEvent;
 import de.fhpotsdam.unfolding.events.MapEventListener;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
-import de.fhpotsdam.unfolding.marker.MarkerManager;
 import de.fhpotsdam.unfolding.providers.EsriProvider;
 
 @SuppressWarnings("serial")
@@ -22,7 +21,6 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 	private TwinTownTable table;
 	private UnfoldingMap map;
-	private MarkerManager<Marker> markerManager;
 	private ControlP5 cp5; 
 
 	/* (non-Javadoc)
@@ -41,7 +39,6 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.setTweening(true);
 		map.zoomAndPanTo(6, new Location(51.164181f, 10.454150f));
 		map.setZoomRange(3, 9);
-		this.markerManager = map.getDefaultMarkerManager();
 		
 		// UI
 		cp5 = new ControlP5(this);
