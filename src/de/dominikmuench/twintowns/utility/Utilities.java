@@ -1,7 +1,9 @@
 package de.dominikmuench.twintowns.utility;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import processing.core.PVector;
 import de.dominikmuench.twintowns.MapState;
@@ -9,6 +11,14 @@ import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.utils.ScreenPosition;
 
 public class Utilities {
+	
+	public static final String KEY_INTERSECTION = "intersection";
+	public static final String KEY_EDGE = "edge";
+	public static final String TOP_EDGE = "top";
+	public static final String RIGHT_EDGE = "right";
+	public static final String BOTTOM_EDGE = "bottom";
+	public static final String LEFT_EDGE = "left";
+	public static final String NO_EDGE = "none";
 
 	/**
 	 * Finds the intersection of a given line with the edges of the map.
@@ -17,7 +27,7 @@ public class Utilities {
 	 * @param to The end point of the line.
 	 * @return The intersection of the given line with the edges of the map or the endpoint of the line if no intersection exists.
 	 */
-	public static PVector findMapEdgeIntersection(PVector from, PVector to) {
+	public static Map<String, Object> findMapEdgeIntersection(PVector from, PVector to) {
 		UnfoldingMap map = MapState.getInstance().getMap();
 		ScreenPosition topLeftCorner = map.getScreenPosition(map.getTopLeftBorder());
 		ScreenPosition bottomRightCorner = map.getScreenPosition(map.getBottomRightBorder());
@@ -30,15 +40,39 @@ public class Utilities {
 		edges.add(rightEdge);
 		edges.add(bottomEdge);
 		edges.add(leftEdge);
+		Map<String, Object> intersectionInfo = new HashMap<>();
+		int edgeIndex = 0;
 		for (PVector[] edge : edges) {
 			PVector intersection = intersect(from, to, edge[0], edge[1]);
 			if (intersection == null) {
+				edgeIndex++;
 				continue;
 			} else {
-				return intersection;
+				String intersectionEdge;
+				switch (edgeIndex) {
+				case 0:
+					intersectionEdge = TOP_EDGE;
+					break;
+				case 1:
+					intersectionEdge = RIGHT_EDGE;
+					break;
+				case 2:
+					intersectionEdge = BOTTOM_EDGE;
+					break;
+				case 3:
+					intersectionEdge = LEFT_EDGE;
+				default:
+					intersectionEdge = NO_EDGE;
+					break;
+				}
+				intersectionInfo.put(KEY_EDGE, intersectionEdge);
+				intersectionInfo.put(KEY_INTERSECTION, intersection);
+				return intersectionInfo;
 			}
 		}
-		return to;
+		intersectionInfo.put(KEY_EDGE, NO_EDGE);
+		intersectionInfo.put(KEY_INTERSECTION, to);
+		return intersectionInfo;
 	}
 
 	// a1 is line1 start, a2 is line1 end, b1 is line2 start, b2 is line2 end
@@ -77,7 +111,6 @@ public class Utilities {
 		intersection = PVector.add(a1, PVector.mult(b, t));
 
 		return intersection;
-
 	}
 
 }

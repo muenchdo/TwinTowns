@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
@@ -26,6 +27,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 
 	private int radius;
 	private int highlightColorTransparent;
+	private static final int textSpacing = 5;
 
 	public PartnershipMarker(GermanMunicipality germanMunicipality, Municipality partnerMunicipality) {
 		this(germanMunicipality, new Municipality[]{partnerMunicipality});
@@ -76,7 +78,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				pg.fill(highlightColor);
 				pg.textSize(12);
 				pg.textAlign(PFont.CENTER, PFont.BOTTOM);
-				pg.text(germanMunicipality.getName(), municipalityScreenPos.x, municipalityScreenPos.y);
+				pg.text(germanMunicipality.getName(), municipalityScreenPos.x, municipalityScreenPos.y - textSpacing);
 			} else {
 				pg.fill(color);
 			}
@@ -103,8 +105,30 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				if (isSelected()) {
 					pg.fill(highlightColor);
 					pg.ellipse(partnerScreenPos.x, partnerScreenPos.y, radius, radius);
-					PVector intersection = Utilities.findMapEdgeIntersection(municipalityScreenPos, partnerScreenPos);
-					pg.textAlign(PFont.CENTER, PFont.TOP);
+					Map<String, Object> intersectionInfo = Utilities.findMapEdgeIntersection(municipalityScreenPos, partnerScreenPos);
+					PVector intersection = (PVector) intersectionInfo.get(Utilities.KEY_INTERSECTION);
+					String edge = (String) intersectionInfo.get(Utilities.KEY_EDGE);
+					switch (edge) {
+					case Utilities.TOP_EDGE:
+						pg.textAlign(PFont.CENTER, PFont.TOP);
+						intersection.y += textSpacing;
+						break;
+					case Utilities.RIGHT_EDGE:
+						pg.textAlign(PFont.RIGHT, PFont.CENTER);
+						intersection.x -= textSpacing;
+						break;
+					case Utilities.BOTTOM_EDGE:
+						pg.textAlign(PFont.CENTER, PFont.BOTTOM);
+						intersection.y -= textSpacing;
+						break;
+					case Utilities.LEFT_EDGE:
+						pg.textAlign(PFont.LEFT, PFont.CENTER);
+						intersection.x += textSpacing;
+						break;
+					default:
+						pg.textAlign(PFont.CENTER, PFont.CENTER);
+						break;
+					}
 					pg.text(partnerMunicipality.getName(), intersection.x, intersection.y);
 				}
 				pg.popStyle();
