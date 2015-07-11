@@ -125,13 +125,13 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	@Override
 	public void mouseClicked() {
 		Marker hitMarker = map.getFirstHitMarker(mouseX, mouseY);
+		for (Marker marker : map.getMarkers()) {
+			marker.setSelected(false);
+		}
 		if (hitMarker != null) {
-			for (Marker marker : map.getMarkers()) {
-				marker.setSelected(false);
-			}
 			hitMarker.setSelected(true);
 			MapState.getInstance().setSelectedMarker((PartnershipMarker) hitMarker);
-		}
+		} 
 	}
 	
 	@Override
