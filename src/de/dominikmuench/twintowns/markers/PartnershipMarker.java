@@ -206,6 +206,8 @@ public class PartnershipMarker extends AbstractShapeMarker {
 			arrowedName = leftArrow + " " + arrowedName;
 			intersection.position.x += textSpacing;
 			break;
+		case NONE:
+			break;
 		default:
 			break;
 		}

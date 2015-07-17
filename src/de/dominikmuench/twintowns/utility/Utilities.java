@@ -11,7 +11,7 @@ import de.fhpotsdam.unfolding.utils.ScreenPosition;
 public class Utilities {
 
 	public static enum Edge {
-		TOP, RIGHT, BOTTOM, LEFT;
+		TOP, RIGHT, BOTTOM, LEFT, NONE;
 
 		public static Edge fromInteger(int x) {
 			switch (x) {
@@ -23,6 +23,8 @@ public class Utilities {
 				return BOTTOM;
 			case 3:
 				return LEFT;
+			case 4:
+				return NONE;
 			}
 			return null;
 		}
@@ -108,11 +110,13 @@ public class Utilities {
 	 */
 	public static Intersection getClosestIntersection(PVector from,
 			List<Intersection> intersections) {
-		Intersection closestIntersection = intersections.get(0);
+		Intersection closestIntersection = new Intersection(new PVector(Float.MAX_VALUE, Float.MAX_VALUE), Edge.NONE);
 		float maxDist = Float.MAX_VALUE;
 		for (Intersection intersection : intersections) {
-			if (Math.abs(PVector.dist(intersection.position,
-					closestIntersection.position)) < maxDist) {
+			float dist = Math.abs(PVector.dist(from,
+					intersection.position));
+			if (dist <= maxDist) {
+				maxDist = dist;
 				closestIntersection = intersection;
 			}
 		}
