@@ -9,9 +9,9 @@ public class MapState {
 	private static MapState instance;
 
 	private ControlP5 cp5;
-	
+
 	private UnfoldingMap map;
-	
+
 	private PartnershipMarker selectedMarker;
 
 	private MapState() {
@@ -31,7 +31,7 @@ public class MapState {
 	public void setCp5(ControlP5 cp5) {
 		this.cp5 = cp5;
 	}
-	
+
 	public UnfoldingMap getMap() {
 		return map;
 	}
@@ -39,11 +39,11 @@ public class MapState {
 	public void setMap(UnfoldingMap map) {
 		this.map = map;
 	}
-	
+
 	public PartnershipMarker getSelectedMarker() {
 		return selectedMarker;
 	}
-	
+
 	public void setSelectedMarker(PartnershipMarker selectedMarker) {
 		this.selectedMarker = selectedMarker;
 	}

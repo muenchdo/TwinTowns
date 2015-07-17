@@ -1,9 +1,7 @@
 package de.dominikmuench.twintowns.utility;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import processing.core.PVector;
 import de.dominikmuench.twintowns.MapState;
@@ -11,89 +9,140 @@ import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.utils.ScreenPosition;
 
 public class Utilities {
-	
-	public static final String KEY_INTERSECTION = "intersection";
-	public static final String KEY_EDGE = "edge";
-	public static final String TOP_EDGE = "top";
-	public static final String RIGHT_EDGE = "right";
-	public static final String BOTTOM_EDGE = "bottom";
-	public static final String LEFT_EDGE = "left";
-	public static final String NO_EDGE = "none";
+
+	public static enum Edge {
+		TOP, RIGHT, BOTTOM, LEFT;
+
+		public static Edge fromInteger(int x) {
+			switch (x) {
+			case 0:
+				return TOP;
+			case 1:
+				return RIGHT;
+			case 2:
+				return BOTTOM;
+			case 3:
+				return LEFT;
+			}
+			return null;
+		}
+	}
+
+	public static class Intersection {
+
+		public PVector position;
+		public Edge edge;
+
+		public Intersection(PVector position, Edge edge) {
+			this.position = position;
+			this.edge = edge;
+		}
+	}
+
+	/**
+	 * Checks if a given location is visible inside the current map view.
+	 * 
+	 * @param location
+	 * @return
+	 */
+	public static boolean isOnMap(PVector screenPosition) {
+		UnfoldingMap map = MapState.getInstance().getMap();
+		ScreenPosition topLeftCorner = map.getScreenPosition(map
+				.getTopLeftBorder());
+		ScreenPosition bottomRightCorner = map.getScreenPosition(map
+				.getBottomRightBorder());
+		return screenPosition.x > topLeftCorner.x
+				&& screenPosition.x < bottomRightCorner.x
+				&& screenPosition.y > topLeftCorner.y
+				&& screenPosition.y < bottomRightCorner.y;
+	}
 
 	/**
 	 * Finds the intersection of a given line with the edges of the map.
 	 * 
-	 * @param from The starting point of the line.
-	 * @param to The end point of the line.
-	 * @return The intersection of the given line with the edges of the map or the endpoint of the line if no intersection exists.
+	 * @param from
+	 *            The starting point of the line.
+	 * @param to
+	 *            The end point of the line.
+	 * @return A list of Intersections (can be empty).
 	 */
-	public static Map<String, Object> findMapEdgeIntersection(PVector from, PVector to) {
+	public static List<Intersection> findMapEdgeIntersections(PVector from,
+			PVector to) {
 		UnfoldingMap map = MapState.getInstance().getMap();
-		ScreenPosition topLeftCorner = map.getScreenPosition(map.getTopLeftBorder());
-		ScreenPosition bottomRightCorner = map.getScreenPosition(map.getBottomRightBorder());
-		PVector[] topEdge = new PVector[]{topLeftCorner, new PVector(bottomRightCorner.x, 0)};
-		PVector[] rightEdge = new PVector[]{new PVector(bottomRightCorner.x, 0), bottomRightCorner};
-		PVector[] bottomEdge = new PVector[]{new PVector(0, bottomRightCorner.y), bottomRightCorner};
-		PVector[] leftEdge = new PVector[]{topLeftCorner, new PVector(0, bottomRightCorner.y)};
+		ScreenPosition topLeftCorner = map.getScreenPosition(map
+				.getTopLeftBorder());
+		ScreenPosition bottomRightCorner = map.getScreenPosition(map
+				.getBottomRightBorder());
+		PVector[] topEdge = new PVector[] { topLeftCorner,
+				new PVector(bottomRightCorner.x, 0) };
+		PVector[] rightEdge = new PVector[] {
+				new PVector(bottomRightCorner.x, 0), bottomRightCorner };
+		PVector[] bottomEdge = new PVector[] {
+				new PVector(0, bottomRightCorner.y), bottomRightCorner };
+		PVector[] leftEdge = new PVector[] { topLeftCorner,
+				new PVector(0, bottomRightCorner.y) };
 		List<PVector[]> edges = new ArrayList<PVector[]>();
 		edges.add(topEdge);
 		edges.add(rightEdge);
 		edges.add(bottomEdge);
 		edges.add(leftEdge);
-		Map<String, Object> intersectionInfo = new HashMap<>();
+		List<Intersection> intersections = new ArrayList<>();
 		int edgeIndex = 0;
 		for (PVector[] edge : edges) {
 			PVector intersection = intersect(from, to, edge[0], edge[1]);
-			if (intersection == null) {
-				edgeIndex++;
-				continue;
-			} else {
-				String intersectionEdge;
-				switch (edgeIndex) {
-				case 0:
-					intersectionEdge = TOP_EDGE;
-					break;
-				case 1:
-					intersectionEdge = RIGHT_EDGE;
-					break;
-				case 2:
-					intersectionEdge = BOTTOM_EDGE;
-					break;
-				case 3:
-					intersectionEdge = LEFT_EDGE;
-					break;
-				default:
-					intersectionEdge = NO_EDGE;
-					break;
-				}
-				intersectionInfo.put(KEY_EDGE, intersectionEdge);
-				intersectionInfo.put(KEY_INTERSECTION, intersection);
-				return intersectionInfo;
+			if (intersection != null) {
+				intersections.add(new Intersection(intersection, Edge
+						.fromInteger(edgeIndex)));
 			}
+			edgeIndex++;
 		}
-		intersectionInfo.put(KEY_EDGE, NO_EDGE);
-		intersectionInfo.put(KEY_INTERSECTION, to);
-		return intersectionInfo;
+		return intersections;
 	}
 
-	// a1 is line1 start, a2 is line1 end, b1 is line2 start, b2 is line2 end
+	/**
+	 * Finds the closest intersection from a vector and a list of intersections.
+	 * 
+	 * @param from
+	 * @param intersections
+	 * @return
+	 */
+	public static Intersection getClosestIntersection(PVector from,
+			List<Intersection> intersections) {
+		Intersection closestIntersection = intersections.get(0);
+		float maxDist = Float.MAX_VALUE;
+		for (Intersection intersection : intersections) {
+			if (Math.abs(PVector.dist(intersection.position,
+					closestIntersection.position)) < maxDist) {
+				closestIntersection = intersection;
+			}
+		}
+		return closestIntersection;
+	}
+
 	/**
 	 * Intersects two lines.
 	 * 
-	 * @param a1 The start of the first line.
-	 * @param a2 The end of the first line.
-	 * @param b1 The start of the second line.
-	 * @param b2 The end of the second line.
-	 * @return The intersection of the two lines or null if they don't intersect.
+	 * @param a1
+	 *            The start of the first line.
+	 * @param a2
+	 *            The end of the first line.
+	 * @param b1
+	 *            The start of the second line.
+	 * @param b2
+	 *            The end of the second line.
+	 * @return The intersection of the two lines or null if they don't
+	 *         intersect.
 	 */
-	private static PVector intersect(PVector a1, PVector a2, PVector b1, PVector b2) {
+	private static PVector intersect(PVector a1, PVector a2, PVector b1,
+			PVector b2) {
 		PVector intersection = new PVector();
 
 		PVector b = PVector.sub(a2, a1);
 		PVector d = PVector.sub(b2, b1);
 		float bDotDPerpendicular = b.x * d.y - b.y * d.x;
 
-		// if b dot d == 0, it means the lines are parallel so have infinite intersection points
+		// if b dot d == 0, it means the lines are parallel so have infinite
+		// intersection points
 		if (bDotDPerpendicular == 0) {
 			return null;
 		}
@@ -113,7 +162,7 @@ public class Utilities {
 
 		return intersection;
 	}
-	
+
 	public static double getAngle(PVector v) {
 		return Math.toDegrees(Math.atan2(v.y, v.x));
 	}
