@@ -30,10 +30,15 @@ public final class Style {
 	 */
 	public static final int YELLOW_LOW = new Color(200, 200, 0, lowOpacity)
 			.getRGB();
+	
+	/**
+	 * Base marker size
+	 */
+	public static final float BASE_MARKER_SIZE = 0.5f;
 
 	/**
 	 * Marker size
 	 */
-	public static final int MARKER_SIZE = 5;
+	public static final int MARKER_SIZE = 10;
 
 }

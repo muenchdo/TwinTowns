@@ -41,17 +41,48 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.setTweening(true);
 		map.zoomAndPanTo(6, new Location(51.164181f, 10.454150f));
 		map.setZoomRange(3, 9);
+		
+		// Font
+		PFont pFont = createFont("OpenSans", 12, true);
+		ControlFont font = new ControlFont(pFont, 12);
 
 		// UI
 		cp5 = new ControlP5(this);
 		MapState.getInstance().setCp5(cp5);
 		cp5.addTextfield("municipalityFilter")
-				// .setText("Berlin")
-				.setPosition(10, 10).setSize(200, 20).setCaptionLabel("City")
+				.setText("München")
+				.setPosition(10, 10)
+				.setSize(200, 20)
+				.setCaptionLabel("City")
+				.setFont(font)
 				.setColorCaptionLabel(0);
-		cp5.addTextfield("stateFilter").setText("Bavaria").setPosition(10, 55)
-				.setSize(200, 20).setCaptionLabel("State")
+		
+		cp5.addTextfield("stateFilter")
+				.setText("Bavaria")
+				.setPosition(10, 55)
+				.setSize(200, 20)
+				.setCaptionLabel("State")
+				.setFont(font)
 				.setColorCaptionLabel(0);
+		
+		cp5.addCheckBox("numOfPartners")
+				.setPosition(10, 100)
+				.setColorLabel(0)
+                .setSize(20, 20)
+                .setItemsPerRow(1)
+                .setSpacingRow(20)
+                .addItem("Number of partnerships", 0);
+		
+		cp5.addRange("numOfPartnersRange")
+				.setVisible(false);
+		
+		cp5.addCheckBox("averageDirection")
+				.setPosition(10, 135)
+				.setColorLabel(0)
+                .setSize(20, 20)
+                .setItemsPerRow(1)
+                .setSpacingRow(20)
+                .addItem("Average direction", 0);
 
 		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 75));
 
@@ -61,7 +92,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		List<PartnershipMarker> markers = new ArrayList<>();
 		PartnershipMarker lastMarker = null;
 		for (TableRow row : table.rows()) {
-			if (table.getMunicipality(row).contains("Kreis")) {
+			if (table.getMunicipality(row).contains("Kreis") || table.getMunicipality(row).contains("Bezirk")) {
 				continue;
 			}
 
@@ -135,6 +166,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 			hitMarker.setSelected(true);
 			MapState.getInstance().setSelectedMarker(
 					(PartnershipMarker) hitMarker);
+		} else {
+			MapState.getInstance().setSelectedMarker(null);
 		}
 	}
 

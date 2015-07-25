@@ -167,7 +167,13 @@ public class Utilities {
 		return intersection;
 	}
 
+	/**
+	 * Calculates the angle between the x-axis and the given vector.
+	 * 
+	 * @param v A vector.
+	 * @return The angle between the given vector and the x-axis in degrees from 0° to 360°.
+	 */
 	public static double getAngle(PVector v) {
-		return Math.toDegrees(Math.atan2(v.y, v.x));
+		return (Math.toDegrees(Math.atan2(v.y, v.x)) + 360) % 360;
 	}
 }
