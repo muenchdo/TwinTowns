@@ -59,14 +59,14 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		
 		cp5.addTextfield("stateFilter")
 				.setText("Bavaria")
-				.setPosition(10, 55)
+				.setPosition(10, 50)
 				.setSize(200, 20)
 				.setCaptionLabel("State")
 				.setFont(font)
 				.setColorCaptionLabel(0);
 		
 		cp5.addCheckBox("numOfPartners")
-				.setPosition(10, 100)
+				.setPosition(10, 90)
 				.setColorLabel(0)
                 .setSize(20, 20)
                 .setItemsPerRow(1)
@@ -77,14 +77,14 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 				.setVisible(false);
 		
 		cp5.addCheckBox("averageDirection")
-				.setPosition(10, 135)
+				.setPosition(10, 120)
 				.setColorLabel(0)
                 .setSize(20, 20)
                 .setItemsPerRow(1)
                 .setSpacingRow(20)
                 .addItem("Average direction", 0);
 
-		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 75));
+		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 140));
 
 		// Data & Markers
 		table = new TwinTownTable(this);
