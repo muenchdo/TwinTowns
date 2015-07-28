@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.data.TableRow;
+import controlP5.CheckBox;
+import controlP5.ControlFont;
 import controlP5.ControlP5;
+import controlP5.Range;
 import de.dominikmuench.twintowns.markers.PartnershipMarker;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
 import de.dominikmuench.twintowns.model.Municipality;
@@ -22,6 +26,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	private TwinTownTable table;
 	private UnfoldingMap map;
 	private ControlP5 cp5;
+	private Range numOfPartnersRange;
+	private CheckBox averageDirectionCheckBox;
 
 	/*
 	 * (non-Javadoc)
@@ -73,10 +79,20 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
                 .setSpacingRow(20)
                 .addItem("Number of partnerships", 0);
 		
-		cp5.addRange("numOfPartnersRange")
-				.setVisible(false);
+		numOfPartnersRange = cp5.addRange("numOfPartnersRange")
+				.setBroadcast(false) 
+				.setPosition(10, 120)
+				.setSize(200, 10)
+				.setHandleSize(10)
+				.setRange(0, 75)
+				.setDecimalPrecision(0)
+				.setRangeValues(0, 73)
+				.setBroadcast(true)	
+				.setCaptionLabel("Filter")
+				.setColorCaptionLabel(0)
+				.hide();
 		
-		cp5.addCheckBox("averageDirection")
+		averageDirectionCheckBox = cp5.addCheckBox("averageDirection")
 				.setPosition(10, 120)
 				.setColorLabel(0)
                 .setSize(20, 20)
@@ -181,6 +197,16 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	public void onManipulation(MapEvent event) {
 		// TODO Auto-generated method stub
 		System.err.println(event.toString());
+	}
+	
+	public void numOfPartners(float[] a) {
+		if (a[0] == 1.0) {
+			numOfPartnersRange.show();
+			averageDirectionCheckBox.setPosition(10, averageDirectionCheckBox.getPosition().y + 25);
+		} else {
+			numOfPartnersRange.hide();
+			averageDirectionCheckBox.setPosition(10, averageDirectionCheckBox.getPosition().y - 25);
+		}
 	}
 
 	public static void main(String[] args) {

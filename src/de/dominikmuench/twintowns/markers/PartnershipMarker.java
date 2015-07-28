@@ -11,6 +11,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 import controlP5.CheckBox;
 import controlP5.ControlP5;
+import controlP5.Range;
 import controlP5.Textfield;
 import de.dominikmuench.twintowns.MapState;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
@@ -112,8 +113,14 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		}
 		
 		ControlP5 cp5 = MapState.getInstance().getCp5();
-		boolean showAverageDirection = cp5.get(CheckBox.class, "averageDirection").getArrayValue()[0] == 1.0;
-		boolean showNumOfPartners = cp5.get(CheckBox.class, "numOfPartners").getArrayValue()[0] == 1.0;
+		boolean showAverageDirection = cp5.get(CheckBox.class, "averageDirection").getArrayValue(0) == 1.0;
+		boolean showNumOfPartners = cp5.get(CheckBox.class, "numOfPartners").getArrayValue(0) == 1.0;
+		int minNumOfPartners = (int) cp5.get(Range.class, "numOfPartnersRange").getArrayValue(0);
+		int maxNumOfPartners = (int) cp5.get(Range.class, "numOfPartnersRange").getArrayValue(1);
+		
+		if (showNumOfPartners && !(this.partnerMunicipalities.size() >= minNumOfPartners && this.partnerMunicipalities.size() <= maxNumOfPartners)) {
+			return;
+		}
 
 		// German municipality
 		ScreenPosition municipalityScreenPos = map
