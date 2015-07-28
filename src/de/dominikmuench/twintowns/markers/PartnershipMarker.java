@@ -94,6 +94,19 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				cp5.get(Textfield.class, "stateFilter").getText());
 		return filteredByMunicipality && filteredByState;
 	}
+	
+	public boolean showNumOfPartners() {
+		ControlP5 cp5 = MapState.getInstance().getCp5();
+		return cp5.get(CheckBox.class, "numOfPartners").getArrayValue(0) == 1.0;
+	}
+	
+	public float radius(UnfoldingMap map) {
+		if (showNumOfPartners()) {
+			return (float) (Math.log(map.getZoom()) / Math.log(2) * Math.sqrt(partnerMunicipalities.size() / Math.PI));
+		} else {
+			return (float) (Math.log(map.getZoom() * Style.BASE_MARKER_SIZE) / Math.log(2));
+		}
+	}
 
 	@Override
 	protected void draw(PGraphics pg, List<MapPosition> mapPositions,
@@ -114,11 +127,10 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		
 		ControlP5 cp5 = MapState.getInstance().getCp5();
 		boolean showAverageDirection = cp5.get(CheckBox.class, "averageDirection").getArrayValue(0) == 1.0;
-		boolean showNumOfPartners = cp5.get(CheckBox.class, "numOfPartners").getArrayValue(0) == 1.0;
 		int minNumOfPartners = (int) cp5.get(Range.class, "numOfPartnersRange").getArrayValue(0);
 		int maxNumOfPartners = (int) cp5.get(Range.class, "numOfPartnersRange").getArrayValue(1);
 		
-		if (showNumOfPartners && !(this.partnerMunicipalities.size() >= minNumOfPartners && this.partnerMunicipalities.size() <= maxNumOfPartners)) {
+		if (showNumOfPartners() && !(this.partnerMunicipalities.size() >= minNumOfPartners && this.partnerMunicipalities.size() <= maxNumOfPartners)) {
 			return;
 		}
 
@@ -138,13 +150,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				pg.fill(color);
 			}
 			
-			
-			if (showNumOfPartners) {
-				radius = (float) (Math.log(map.getZoom()) / Math.log(2) * Math.sqrt(partnerMunicipalities.size() / Math.PI));
-			} else {
-				radius = (float) (Math.log(map.getZoom() * Style.BASE_MARKER_SIZE) / Math.log(2));
-			}
-			pg.ellipse(municipalityScreenPos.x, municipalityScreenPos.y, radius, radius);
+			pg.ellipse(municipalityScreenPos.x, municipalityScreenPos.y, radius(map), radius(map));
 			
 			
 			if (showAverageDirection) {	
@@ -305,10 +311,9 @@ public class PartnershipMarker extends AbstractShapeMarker {
 
 	@Override
 	public boolean isInside(UnfoldingMap map, float checkX, float checkY) {
-		ScreenPosition position = map.getScreenPosition(germanMunicipality
-				.getLocation());
+		ScreenPosition position = map.getScreenPosition(germanMunicipality.getLocation());
 		PVector pos = new PVector(position.x, position.y);
-		return pos.dist(new PVector(checkX, checkY)) < radius;
+		return pos.dist(new PVector(checkX, checkY)) <= radius(map);
 	}
 
 }
