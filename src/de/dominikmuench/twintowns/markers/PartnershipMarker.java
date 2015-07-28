@@ -99,8 +99,8 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	protected void draw(PGraphics pg, List<MapPosition> mapPositions,
 			HashMap<String, Object> properties, UnfoldingMap map) {
 
-		boolean isClicked = MapState.getInstance().getSelectedMarker() != null
-				&& MapState.getInstance().getSelectedMarker().equals(this);
+		boolean isClicked = MapState.getInstance().getClickedMarker() != null
+				&& MapState.getInstance().getClickedMarker().equals(this);
 
 		if (isClicked) {
 			this.highlightColor = new Color(0, 200, 200, 255).getRGB();

@@ -13,6 +13,7 @@ public class MapState {
 	private UnfoldingMap map;
 
 	private PartnershipMarker selectedMarker;
+	private PartnershipMarker clickedMarker;
 
 	private MapState() {
 	}
@@ -38,6 +39,14 @@ public class MapState {
 
 	public void setMap(UnfoldingMap map) {
 		this.map = map;
+	}
+
+	public PartnershipMarker getClickedMarker() {
+		return clickedMarker;
+	}
+
+	public void setClickedMarker(PartnershipMarker clickedMarker) {
+		this.clickedMarker = clickedMarker;
 	}
 
 	public PartnershipMarker getSelectedMarker() {
