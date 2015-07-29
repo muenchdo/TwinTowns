@@ -66,15 +66,15 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 				.setText("München")
 				.setPosition(10, 10)
 				.setSize(200, 20)
-				.setCaptionLabel("City")
+				.setCaptionLabel("Gemeinde")
 				.setFont(font)
 				.setColorCaptionLabel(0);
 		
 		cp5.addTextfield("stateFilter")
-				.setText("Bavaria")
+				.setText("Bayern")
 				.setPosition(10, 50)
 				.setSize(200, 20)
-				.setCaptionLabel("State")
+				.setCaptionLabel("Bundesland")
 				.setFont(font)
 				.setColorCaptionLabel(0);
 		
@@ -95,16 +95,16 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
                 .setSize(20, 20)
                 .setItemsPerRow(1)
                 .setSpacingRow(20)
-                .addItem("Number of partnerships", 0);
+                .addItem("Anzahl Partnerschaften", 0);
 		
 		numOfPartnersRange = cp5.addRange("numOfPartnersRange")
 				.setBroadcast(false) 
 				.setPosition(10, 150)
 				.setSize(200, 10)
 				.setHandleSize(10)
-				.setRange(1, 100)
+				.setRange(1, 73)
 				.setDecimalPrecision(0)
-				.setRangeValues(1, 80)
+				.setRangeValues(1, 73)
 				.setBroadcast(true)	
 				.setCaptionLabel("Filter")
 				.setColorCaptionLabel(0)
@@ -116,7 +116,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
                 .setSize(20, 20)
                 .setItemsPerRow(1)
                 .setSpacingRow(20)
-                .addItem("Average direction", 0);
+                .addItem("Durchschnittliche Richtung", 0);
 
 		new RestrictedEventDispatcher(this, map, controlArea);
 

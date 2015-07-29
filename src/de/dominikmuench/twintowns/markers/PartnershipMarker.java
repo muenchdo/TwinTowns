@@ -246,15 +246,15 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				pg.textAlign(PFont.RIGHT, PFont.TOP);
 				pg.text(germanMunicipality.getName() + ", "
 						+ germanMunicipality.getState(), map.getWidth()
-						- textSpacing, textSpacing);
+						- 10, 10);
 				int numOfPartners = partnerMunicipalities.size();
 				pg.textFont(MapState.getInstance().openSans12, 12);
 				String partnerText = numOfPartners == 1 ? numOfPartners
-						+ " partner municipality" : numOfPartners
-						+ " partner municipalities";
-				String countriesText = numOfPartnerCountries == 1 ? numOfPartners + " country" : numOfPartnerCountries + " countries";
-				pg.text(partnerText + " in " + countriesText, map.getWidth() - textSpacing,
-						textSpacing * 2 + 20);
+						+ " Partnerstadt" : numOfPartners
+						+ " Partnerstädte";
+				String countriesText = numOfPartnerCountries == 1 ? numOfPartners + " Land" : numOfPartnerCountries + " Ländern";
+				pg.text(partnerText + " in " + countriesText, map.getWidth() - 10,
+						10 * 2 + 20);
 				pg.popStyle();
 			}
 		}
