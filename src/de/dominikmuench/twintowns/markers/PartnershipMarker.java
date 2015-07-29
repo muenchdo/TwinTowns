@@ -147,7 +147,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				pg.textSize(12);
 				pg.textAlign(PFont.CENTER, PFont.BOTTOM);
 				pg.text(germanMunicipality.getName(), municipalityScreenPos.x,
-						municipalityScreenPos.y - textSpacing);
+						municipalityScreenPos.y - radius(map) / 2);
 			} else {
 				pg.fill(color);
 			}
