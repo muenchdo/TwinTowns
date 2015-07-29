@@ -150,6 +150,23 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	@Override
 	public void draw() {
 		map.draw();
+		if (cp5.get(CheckBox.class, "numOfPartners").getArrayValue()[0] == 1.0) {
+			pushStyle();
+			noStroke();
+			fill(Style.YELLOW_LOW);
+			float radius = (float) (Math.log(map.getZoom()) / Math.log(2) * Math.sqrt(1 / Math.PI));
+			ellipse(width - 70, height - 100, radius, radius);
+			radius = (float) (Math.log(map.getZoom()) / Math.log(2) * Math.sqrt(5 / Math.PI));
+			ellipse(width - 70, height - 67, radius, radius);
+			radius = (float) (Math.log(map.getZoom()) / Math.log(2) * Math.sqrt(50 / Math.PI));
+			ellipse(width - 70, height - 30, radius, radius);
+			textAlign(CENTER, CENTER);
+			fill(0);
+			text("1", width - 30, height - 100);
+			text("5", width - 30, height - 67);
+			text("50", width - 30, height - 30);
+			popStyle();
+		}
 	}
 
 //	@Override
