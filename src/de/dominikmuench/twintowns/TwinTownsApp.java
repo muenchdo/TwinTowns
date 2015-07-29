@@ -161,6 +161,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		for (Marker marker : map.getMarkers()) {
 			if (!marker.equals(MapState.getInstance().getClickedMarker())) {
 				marker.setSelected(false);
+				MapState.getInstance().setSelectedMarker(null);
 			}
 		}
 
@@ -182,7 +183,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		if (hitMarker != null) {
 			hitMarker.setSelected(true);
 			MapState.getInstance().setClickedMarker(hitMarker);
-		} else {
+		} else if (map.getFirstHitMarker(mouseX, mouseY) == null) {
 			MapState.getInstance().setClickedMarker(null);
 		}
 	}
