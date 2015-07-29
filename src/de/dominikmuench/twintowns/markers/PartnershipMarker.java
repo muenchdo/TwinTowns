@@ -180,7 +180,7 @@ public class PartnershipMarker extends AbstractShapeMarker {
 				if (isSelected()) {
 					pg.pushStyle();
 					pg.noFill();
-					pg.strokeWeight(2);
+					pg.strokeWeight(strokeWeight);
 					pg.stroke(highlightColorTransparent);
 					pg.line(municipalityScreenPos.x, municipalityScreenPos.y,
 							partnerScreenPos.x, partnerScreenPos.y);

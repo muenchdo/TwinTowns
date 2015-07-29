@@ -2,6 +2,9 @@ package de.dominikmuench.twintowns.utility;
 
 import java.awt.Color;
 
+import processing.core.PApplet;
+import processing.core.PFont;
+
 public final class Style {
 
 	private static final int lowOpacity = 100;
@@ -22,7 +25,7 @@ public final class Style {
 	/**
 	 * Yellow with full opacity.
 	 */
-	public static final int YELLOW_FULL = new Color(0, 200, 200, fullOpacity)
+	public static final int YELLOW_FULL = new Color(200, 200, 0, fullOpacity)
 			.getRGB();
 
 	/**
@@ -34,7 +37,7 @@ public final class Style {
 	/**
 	 * Base marker size
 	 */
-	public static final float BASE_MARKER_SIZE = 0.5f;
+	public static final float BASE_MARKER_SIZE = 0.3f;
 
 	/**
 	 * Marker size
