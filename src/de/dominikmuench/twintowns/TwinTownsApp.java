@@ -55,6 +55,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 		// UI
 		controlArea = new Rectangle(0, 0, 210, 140);
+		cursor(CROSS);
 		cp5 = new ControlP5(this);
 		MapState.getInstance().setCp5(cp5);
 		cp5.addTextfield("municipalityFilter")
