@@ -1,5 +1,6 @@
 package de.dominikmuench.twintowns;
 
+import processing.core.PFont;
 import controlP5.ControlP5;
 import de.dominikmuench.twintowns.markers.PartnershipMarker;
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -9,6 +10,9 @@ public class MapState {
 	private static MapState instance;
 
 	private ControlP5 cp5;
+	
+	public PFont openSans12;
+	public PFont openSans18;
 
 	private UnfoldingMap map;
 

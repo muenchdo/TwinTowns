@@ -125,6 +125,8 @@ public class PartnershipMarker extends AbstractShapeMarker {
 					.getRGB();
 		}
 		
+		pg.textFont(MapState.getInstance().openSans12, 12);
+		
 		ControlP5 cp5 = MapState.getInstance().getCp5();
 		boolean showAverageDirection = cp5.get(CheckBox.class, "averageDirection").getArrayValue(0) == 1.0;
 		int minNumOfPartners = (int) cp5.get(Range.class, "numOfPartnersRange").getArrayValue(0);
@@ -224,19 +226,19 @@ public class PartnershipMarker extends AbstractShapeMarker {
 			if (isClicked) {
 				pg.pushStyle();
 				pg.fill(0);
-				pg.textSize(14);
+				pg.textFont(MapState.getInstance().openSans18, 18);
 				pg.textAlign(PFont.RIGHT, PFont.TOP);
 				pg.text(germanMunicipality.getName() + ", "
 						+ germanMunicipality.getState(), map.getWidth()
 						- textSpacing, textSpacing);
 				int numOfPartners = partnerMunicipalities.size();
-				pg.textSize(12);
+				pg.textFont(MapState.getInstance().openSans12, 12);
 				String partnerText = numOfPartners == 1 ? numOfPartners
 						+ " partner municipality" : numOfPartners
 						+ " partner municipalities";
 				String countriesText = numOfPartnerCountries == 1 ? numOfPartners + " country" : numOfPartnerCountries + " countries";
 				pg.text(partnerText + " in " + countriesText, map.getWidth() - textSpacing,
-						textSpacing * 2 + 15);
+						textSpacing * 2 + 20);
 				pg.popStyle();
 			}
 		}

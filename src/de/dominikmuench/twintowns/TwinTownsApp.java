@@ -50,8 +50,11 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		map.setZoomRange(3, 9);
 		
 		// Font
-		PFont pFont = createFont("OpenSans", 12, true);
-		ControlFont font = new ControlFont(pFont, 12);
+		PFont openSans12 = createFont("OpenSans", 12, true);
+		PFont openSans18 = createFont("OpenSans", 18, true);
+		MapState.getInstance().openSans12 = openSans12;
+		MapState.getInstance().openSans18 = openSans18;
+		ControlFont font = new ControlFont(openSans12, 12);
 
 		// UI
 		controlArea = new Rectangle(0, 0, 210, 140);
