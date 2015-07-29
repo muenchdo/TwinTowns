@@ -95,6 +95,17 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		return filteredByMunicipality && filteredByState;
 	}
 	
+	public boolean fulfillsForm(Municipality partnerMunicipality) {
+		ControlP5 cp5 = MapState.getInstance().getCp5();
+		boolean showPartnership = cp5.get(CheckBox.class, "form").getArrayValue(0) == 1.0f;
+		boolean showFriendship = cp5.get(CheckBox.class, "form").getArrayValue(1) == 1.0f;
+		boolean showKontakt = cp5.get(CheckBox.class, "form").getArrayValue(2) == 1.0f;
+		boolean isPartnership = partnerMunicipality.getForm().equals("p");
+		boolean isFriendship = partnerMunicipality.getForm().equals("f");
+		boolean isKontakt = partnerMunicipality.getForm().equals("k");
+		return (showPartnership && isPartnership) || (showFriendship && isFriendship) || (showKontakt && isKontakt);
+	}
+	
 	public boolean showNumOfPartners() {
 		ControlP5 cp5 = MapState.getInstance().getCp5();
 		return cp5.get(CheckBox.class, "numOfPartners").getArrayValue(0) == 1.0;
@@ -173,6 +184,11 @@ public class PartnershipMarker extends AbstractShapeMarker {
 
 			// Partner municipalities
 			for (Municipality partnerMunicipality : partnerMunicipalities) {
+				
+				if (!fulfillsForm(partnerMunicipality)) {
+					continue;
+				}
+				
 				ScreenPosition partnerScreenPos = map
 						.getScreenPosition(partnerMunicipality.getLocation());
 

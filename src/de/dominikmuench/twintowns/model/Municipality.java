@@ -8,12 +8,14 @@ public class Municipality {
 	protected Location location;
 	protected String country;
 	protected String continent;
+	protected String form;
 	
-	public Municipality(String name, Location location, String country, String continent) {
+	public Municipality(String name, Location location, String country, String continent, String form) {
 		this.name = name;
 		this.location = location;
 		this.country = country;
 		this.continent = continent;
+		this.form = form;
 	}
 	
 	public String getName() {
@@ -46,6 +48,14 @@ public class Municipality {
 	
 	public void setContinent(String continent) {
 		this.continent = continent;
+	}
+
+	public String getForm() {
+		return form;
+	}
+
+	public void setForm(String form) {
+		this.form = form;
 	}
 	
 }
