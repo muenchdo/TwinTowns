@@ -25,6 +25,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 	private TwinTownTable table;
 	private UnfoldingMap map;
+	private Rectangle controlArea;
 	private ControlP5 cp5;
 	private Range numOfPartnersRange;
 	private CheckBox averageDirectionCheckBox;
@@ -53,6 +54,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		ControlFont font = new ControlFont(pFont, 12);
 
 		// UI
+		controlArea = new Rectangle(0, 0, 210, 140);
 		cp5 = new ControlP5(this);
 		MapState.getInstance().setCp5(cp5);
 		cp5.addTextfield("municipalityFilter")
@@ -100,7 +102,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
                 .setSpacingRow(20)
                 .addItem("Average direction", 0);
 
-		new RestrictedEventDispatcher(this, map, new Rectangle(0, 0, 210, 140));
+		new RestrictedEventDispatcher(this, map, controlArea);
 
 		// Data & Markers
 		table = new TwinTownTable(this);
@@ -176,6 +178,9 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 	@Override
 	public void mouseClicked() {
+		if (controlArea.contains(mouseX, mouseY)) {
+			return;
+		}
 		for (Marker marker : map.getMarkers()) {
 			marker.setSelected(false);
 		}
@@ -204,9 +209,11 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		if (a[0] == 1.0) {
 			numOfPartnersRange.show();
 			averageDirectionCheckBox.setPosition(10, averageDirectionCheckBox.getPosition().y + 25);
+			controlArea.y += 25;
 		} else {
 			numOfPartnersRange.hide();
 			averageDirectionCheckBox.setPosition(10, averageDirectionCheckBox.getPosition().y - 25);
+			controlArea.y -= 25;
 		}
 	}
 
