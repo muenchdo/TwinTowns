@@ -16,6 +16,7 @@ public class TwinTownTable extends Table {
 	private final static String COL_PARTNER_CONTINENT = "continent";
 	private final static String COL_PARTNER_LAT = "partner_latitude";
 	private final static String COL_PARTNER_LNG = "partner_longitude";
+	private final static String COL_SINCE = "seit";
 	private final static String COL_FORM = "form";
 
 	private PApplet pa;
@@ -122,6 +123,10 @@ public class TwinTownTable extends Table {
 	
 	public String getForm(TableRow row) {
 		return row.getString(COL_FORM);
+	}
+	
+	public Integer getYear(TableRow row) {
+		return row.getInt(COL_SINCE);
 	}
 
 }

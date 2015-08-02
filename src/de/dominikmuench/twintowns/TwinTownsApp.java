@@ -58,7 +58,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		ControlFont font = new ControlFont(openSans12, 12);
 
 		// UI
-		controlArea = new Rectangle(0, 0, 210, 140);
+		controlArea = new Rectangle(0, 0, 210, 200);
 		cursor(CROSS);
 		cp5 = new ControlP5(this);
 		MapState.getInstance().setCp5(cp5);
@@ -89,8 +89,20 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 			.addItem("Kontakt", 2);
 		formCheckBox.activateAll();
 		
-		cp5.addCheckBox("numOfPartners")
+		cp5.addRange("yearRange")
+				.setBroadcast(false)
 				.setPosition(10, 120)
+				.setSize(200, 10)
+				.setHandleSize(10)
+				.setRange(1913, 2015)
+				.setDecimalPrecision(0)
+				.setRangeValues(1913, 2015)
+				.setBroadcast(true)
+				.setCaptionLabel("seit")
+				.setColorCaptionLabel(0);
+		
+		cp5.addCheckBox("numOfPartners")
+				.setPosition(10, 150)
 				.setColorLabel(0)
                 .setSize(20, 20)
                 .setItemsPerRow(1)
@@ -99,7 +111,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		
 		numOfPartnersRange = cp5.addRange("numOfPartnersRange")
 				.setBroadcast(false) 
-				.setPosition(10, 150)
+				.setPosition(10, 180)
 				.setSize(200, 10)
 				.setHandleSize(10)
 				.setRange(1, 73)
@@ -111,7 +123,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 				.hide();
 		
 		averageDirectionCheckBox = cp5.addCheckBox("averageDirection")
-				.setPosition(10, 150)
+				.setPosition(10, 180)
 				.setColorLabel(0)
                 .setSize(20, 20)
                 .setItemsPerRow(1)
@@ -141,7 +153,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 							table.getPartnerLongitude(row)),
 					table.getPartnerCountry(row),
 					table.getPartnerContinent(row),
-					table.getForm(row));
+					table.getForm(row),
+					table.getYear(row));
 
 			if (lastMarker == null
 					|| !lastMarker.getGermanMunicipality().getName()

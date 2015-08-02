@@ -106,6 +106,13 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		return (showPartnership && isPartnership) || (showFriendship && isFriendship) || (showKontakt && isKontakt);
 	}
 	
+	public boolean fulfillsYear(Municipality partnerMunicipality) {
+		ControlP5 cp5 = MapState.getInstance().getCp5();
+		int minYear = (int) cp5.get(Range.class, "yearRange").getArrayValue(0);
+		int maxYear = (int) cp5.get(Range.class, "yearRange").getArrayValue(1);
+		return partnerMunicipality.getYear() >= minYear && partnerMunicipality.getYear() <= maxYear;
+	}
+	
 	public boolean showNumOfPartners() {
 		ControlP5 cp5 = MapState.getInstance().getCp5();
 		return cp5.get(CheckBox.class, "numOfPartners").getArrayValue(0) == 1.0;
@@ -186,6 +193,10 @@ public class PartnershipMarker extends AbstractShapeMarker {
 			for (Municipality partnerMunicipality : partnerMunicipalities) {
 				
 				if (!fulfillsForm(partnerMunicipality)) {
+					continue;
+				}
+				
+				if (!fulfillsYear(partnerMunicipality)) {
 					continue;
 				}
 				

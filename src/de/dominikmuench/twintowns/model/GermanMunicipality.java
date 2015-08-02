@@ -7,7 +7,7 @@ public class GermanMunicipality extends Municipality {
 	private String state;
 	
 	public GermanMunicipality(String name, Location location, String state) {
-		super(name, location, "Germany", "Europe", null);
+		super(name, location, "Germany", "Europe", null, null);
 		this.state = state;
 	}
 
