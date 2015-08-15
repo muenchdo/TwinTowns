@@ -33,7 +33,6 @@ public class PartnershipMarker extends AbstractShapeMarker {
 	int numOfPartnerCountries;
 	private float averageAngle;
 
-	private float radius;
 	private float partnerRadius;
 	private int highlightColorTransparent;
 	private static final int textSpacing = 5;
@@ -68,7 +67,6 @@ public class PartnershipMarker extends AbstractShapeMarker {
 		this.color = new Color(200, 200, 0, 100).getRGB();
 		this.highlightColor = new Color(0, 200, 200, 255).getRGB();
 		this.highlightColorTransparent = new Color(0, 200, 200, 100).getRGB();
-		this.radius = Style.MARKER_SIZE;
 		this.partnerRadius = Style.BASE_MARKER_SIZE;
 	}
 

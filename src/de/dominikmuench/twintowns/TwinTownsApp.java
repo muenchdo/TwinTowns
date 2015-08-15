@@ -13,6 +13,7 @@ import controlP5.Range;
 import de.dominikmuench.twintowns.markers.PartnershipMarker;
 import de.dominikmuench.twintowns.model.GermanMunicipality;
 import de.dominikmuench.twintowns.model.Municipality;
+import de.dominikmuench.twintowns.utility.Style;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.events.MapEvent;
 import de.fhpotsdam.unfolding.events.MapEventListener;
@@ -39,8 +40,8 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	@Override
 	public void setup() {
 		// General
-		size(800, 600, P2D);
-		// size(displayWidth, displayHeight, P2D);
+//		size(800, 600, OPENGL);
+		size(displayWidth, displayHeight, JAVA2D);
 		smooth();
 
 		// Map
@@ -63,7 +64,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		cp5 = new ControlP5(this);
 		MapState.getInstance().setCp5(cp5);
 		cp5.addTextfield("municipalityFilter")
-				.setText("München")
+//				.setText("München")
 				.setPosition(10, 10)
 				.setSize(200, 20)
 				.setCaptionLabel("Gemeinde")
@@ -71,7 +72,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 				.setColorCaptionLabel(0);
 		
 		cp5.addTextfield("stateFilter")
-				.setText("Bayern")
+//				.setText("Bayern")
 				.setPosition(10, 50)
 				.setSize(200, 20)
 				.setCaptionLabel("Bundesland")
@@ -180,6 +181,7 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 	@Override
 	public void draw() {
 		map.draw();
+		// Legend
 		if (cp5.get(CheckBox.class, "numOfPartners").getArrayValue()[0] == 1.0) {
 			pushStyle();
 			noStroke();
@@ -199,10 +201,10 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 		}
 	}
 
-//	@Override
-//	public boolean sketchFullScreen() {
-//		return true;
-//	}
+	@Override
+	public boolean sketchFullScreen() {
+		return true;
+	}
 
 	@Override
 	public void mouseMoved() {
@@ -225,9 +227,12 @@ public class TwinTownsApp extends PApplet implements MapEventListener {
 
 	@Override
 	public void mouseClicked() {
+		
+		// Ignore clicks inside control area
 		if (controlArea.contains(mouseX, mouseY)) {
 			return;
 		}
+		
 		for (Marker marker : map.getMarkers()) {
 			marker.setSelected(false);
 		}
