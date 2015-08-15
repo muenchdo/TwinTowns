@@ -2,9 +2,6 @@ package de.dominikmuench.twintowns.utility;
 
 import java.awt.Color;
 
-import processing.core.PApplet;
-import processing.core.PFont;
-
 public final class Style {
 
 	private static final int lowOpacity = 100;
